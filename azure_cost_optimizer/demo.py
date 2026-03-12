@@ -1,0 +1,371 @@
+"""Demo mode — generates a realistic mock Azure subscription for demonstration."""
+
+from __future__ import annotations
+
+from .models import SubscriptionSummary
+
+
+def get_demo_subscription() -> SubscriptionSummary:
+    """Return a mock subscription summary."""
+    return SubscriptionSummary(
+        subscription_id="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        subscription_name="Contoso-Production",
+        total_monthly_cost=18_742.50,
+        resource_count=147,
+        resource_group_count=23,
+        region_count=4,
+        top_regions=["eastus", "westeurope", "southeastasia", "brazilsouth"],
+        cost_by_service={
+            "Virtual Machines": 7_820.00,
+            "SQL Database": 3_450.00,
+            "Storage": 1_890.00,
+            "Cosmos DB": 1_640.00,
+            "App Services": 1_280.00,
+            "Networking": 960.00,
+            "Redis Cache": 720.00,
+            "Other": 982.50,
+        },
+    )
+
+
+def get_demo_resources() -> dict:
+    """Return a comprehensive set of mock Azure resources with cost issues."""
+    return {
+        # ── Compute ────────────────────────────────────────────────
+        "virtual_machines": [
+            {
+                "name": "vm-web-prod-01",
+                "resource_group": "rg-production-web",
+                "region": "eastus",
+                "vm_size": "Standard_D8s_v3",
+                "monthly_cost": 560.00,
+                "power_state": "running",
+                "avg_cpu_pct": 3.2,
+                "avg_memory_pct": 12.0,
+                "has_auto_shutdown": False,
+                "is_dev_test": False,
+                "running_months": 14,
+            },
+            {
+                "name": "vm-staging-api",
+                "resource_group": "rg-staging",
+                "region": "eastus",
+                "vm_size": "Standard_E4s_v3",
+                "monthly_cost": 420.00,
+                "power_state": "stopped",
+                "avg_cpu_pct": 0.0,
+                "avg_memory_pct": 0.0,
+                "has_auto_shutdown": False,
+                "is_dev_test": True,
+                "running_months": 6,
+            },
+            {
+                "name": "vm-dev-jenkins",
+                "resource_group": "rg-development",
+                "region": "westeurope",
+                "vm_size": "Standard_D4s_v3",
+                "monthly_cost": 280.00,
+                "power_state": "running",
+                "avg_cpu_pct": 8.1,
+                "avg_memory_pct": 22.0,
+                "has_auto_shutdown": False,
+                "is_dev_test": True,
+                "running_months": 10,
+            },
+            {
+                "name": "vm-batch-worker-01",
+                "resource_group": "rg-production-batch",
+                "region": "eastus",
+                "vm_size": "Standard_F8s_v2",
+                "monthly_cost": 490.00,
+                "power_state": "running",
+                "avg_cpu_pct": 62.0,
+                "avg_memory_pct": 71.0,
+                "has_auto_shutdown": False,
+                "is_dev_test": False,
+                "running_months": 18,
+            },
+            {
+                "name": "vm-legacy-app",
+                "resource_group": "rg-legacy",
+                "region": "eastus",
+                "vm_size": "Standard_D16s_v3",
+                "monthly_cost": 1120.00,
+                "power_state": "running",
+                "avg_cpu_pct": 4.5,
+                "avg_memory_pct": 9.0,
+                "has_auto_shutdown": False,
+                "is_dev_test": False,
+                "running_months": 24,
+            },
+        ],
+        "scale_sets": [
+            {
+                "name": "vmss-web-frontend",
+                "resource_group": "rg-production-web",
+                "region": "eastus",
+                "monthly_cost": 1600.00,
+                "min_instances": 4,
+                "max_instances": 4,
+            },
+        ],
+        "app_services": [
+            {
+                "name": "app-internal-tool",
+                "resource_group": "rg-internal",
+                "region": "eastus",
+                "monthly_cost": 320.00,
+                "plan_tier": "Premium",
+                "avg_cpu_pct": 5.0,
+                "avg_memory_pct": 18.0,
+            },
+        ],
+        # ── Storage ────────────────────────────────────────────────
+        "managed_disks": [
+            {
+                "name": "disk-orphaned-data",
+                "resource_group": "rg-legacy",
+                "region": "eastus",
+                "monthly_cost": 76.80,
+                "sku": "Premium_LRS",
+                "size_gb": 512,
+                "attached": False,
+            },
+            {
+                "name": "disk-staging-os",
+                "resource_group": "rg-staging",
+                "region": "eastus",
+                "monthly_cost": 19.20,
+                "sku": "Premium_LRS",
+                "size_gb": 128,
+                "attached": False,
+            },
+            {
+                "name": "disk-web-data",
+                "resource_group": "rg-production-web",
+                "region": "eastus",
+                "monthly_cost": 153.60,
+                "sku": "Premium_LRS",
+                "size_gb": 1024,
+                "attached": True,
+                "avg_iops": 35,
+                "max_iops": 5000,
+            },
+        ],
+        "snapshots": [
+            {
+                "name": "snap-web-backup-jan",
+                "resource_group": "rg-production-web",
+                "region": "eastus",
+                "monthly_cost": 12.50,
+                "size_gb": 256,
+                "age_days": 120,
+            },
+            {
+                "name": "snap-db-migration",
+                "resource_group": "rg-production-db",
+                "region": "eastus",
+                "monthly_cost": 25.00,
+                "size_gb": 512,
+                "age_days": 95,
+            },
+            {
+                "name": "snap-dev-checkpoint",
+                "resource_group": "rg-development",
+                "region": "westeurope",
+                "monthly_cost": 6.25,
+                "size_gb": 128,
+                "age_days": 45,
+            },
+        ],
+        "storage_accounts": [
+            {
+                "name": "stcontosoprodlogs",
+                "resource_group": "rg-production-web",
+                "region": "eastus",
+                "monthly_cost": 240.00,
+                "access_tier": "Hot",
+                "last_access_days": 45,
+                "total_size_gb": 2048,
+            },
+        ],
+        # ── Networking ─────────────────────────────────────────────
+        "public_ips": [
+            {
+                "name": "pip-old-lb",
+                "resource_group": "rg-legacy",
+                "region": "eastus",
+                "monthly_cost": 3.65,
+                "sku": "Standard",
+                "associated": False,
+            },
+            {
+                "name": "pip-staging-vm",
+                "resource_group": "rg-staging",
+                "region": "eastus",
+                "monthly_cost": 3.65,
+                "sku": "Standard",
+                "associated": False,
+            },
+            {
+                "name": "pip-dev-test",
+                "resource_group": "rg-development",
+                "region": "westeurope",
+                "monthly_cost": 0.00,
+                "sku": "Basic",
+                "associated": False,
+            },
+        ],
+        "load_balancers": [
+            {
+                "name": "lb-old-api",
+                "resource_group": "rg-legacy",
+                "region": "eastus",
+                "monthly_cost": 18.25,
+                "backend_pool_count": 0,
+                "rule_count": 0,
+            },
+        ],
+        "nat_gateways": [
+            {
+                "name": "nat-dev-unused",
+                "resource_group": "rg-development",
+                "region": "westeurope",
+                "monthly_cost": 32.12,
+                "associated_subnets": 0,
+            },
+        ],
+        "app_gateways": [
+            {
+                "name": "agw-internal",
+                "resource_group": "rg-internal",
+                "region": "eastus",
+                "monthly_cost": 380.00,
+                "tier": "WAF_v2",
+                "capacity_units": 10,
+                "avg_active_connections": 25,
+            },
+        ],
+        # ── Database ───────────────────────────────────────────────
+        "sql_databases": [
+            {
+                "name": "sqldb-analytics",
+                "server": "sql-contoso-prod",
+                "resource_group": "rg-production-db",
+                "region": "eastus",
+                "monthly_cost": 1250.00,
+                "sku": "Premium",
+                "avg_dtu_used_pct": 8.0,
+                "avg_cpu_pct": 6.5,
+                "max_size_gb": 500,
+                "used_size_gb": 42,
+                "is_dev_test": False,
+            },
+            {
+                "name": "sqldb-staging-app",
+                "server": "sql-contoso-staging",
+                "resource_group": "rg-staging",
+                "region": "eastus",
+                "monthly_cost": 450.00,
+                "sku": "BusinessCritical",
+                "avg_dtu_used_pct": 12.0,
+                "avg_cpu_pct": 9.0,
+                "max_size_gb": 250,
+                "used_size_gb": 15,
+                "is_dev_test": True,
+            },
+        ],
+        "cosmos_accounts": [
+            {
+                "name": "cosmos-old-microservice",
+                "resource_group": "rg-legacy",
+                "region": "eastus",
+                "monthly_cost": 820.00,
+                "provisioned_rus": 4000,
+                "avg_ru_usage_pct": 12.0,
+                "autoscale_enabled": False,
+                "request_count_24h": 42,
+            },
+        ],
+        "redis_caches": [
+            {
+                "name": "redis-session-store",
+                "resource_group": "rg-production-web",
+                "region": "eastus",
+                "monthly_cost": 360.00,
+                "sku": "Premium",
+                "memory_used_pct": 8.5,
+                "avg_connections": 3,
+            },
+        ],
+        "mysql_servers": [
+            {
+                "name": "mysql-reporting",
+                "resource_group": "rg-internal",
+                "region": "westeurope",
+                "monthly_cost": 185.00,
+                "sku": "Standard_D4ds_v4",
+                "avg_cpu_pct": 4.2,
+                "storage_used_pct": 15.0,
+            },
+        ],
+        # ── General / Misc ─────────────────────────────────────────
+        "resource_groups": [
+            {
+                "name": "rg-old-experiment",
+                "region": "eastus",
+                "resource_count": 0,
+            },
+            {
+                "name": "rg-decommissioned",
+                "region": "westeurope",
+                "resource_count": 0,
+            },
+        ],
+        "untagged_resources": [
+            {
+                "name": "vm-legacy-app",
+                "resource_group": "rg-legacy",
+                "resource_type": "Microsoft.Compute/virtualMachines",
+                "region": "eastus",
+                "monthly_cost": 1120.00,
+                "missing_tags": ["cost-center", "owner", "environment"],
+            },
+            {
+                "name": "stcontosoprodlogs",
+                "resource_group": "rg-production-web",
+                "resource_type": "Microsoft.Storage/storageAccounts",
+                "region": "eastus",
+                "monthly_cost": 240.00,
+                "missing_tags": ["cost-center", "environment"],
+            },
+            {
+                "name": "redis-session-store",
+                "resource_group": "rg-production-web",
+                "resource_type": "Microsoft.Cache/Redis",
+                "region": "eastus",
+                "monthly_cost": 360.00,
+                "missing_tags": ["owner"],
+            },
+        ],
+        "expensive_region_resources": [
+            {
+                "name": "vm-brazil-api",
+                "resource_group": "rg-latam",
+                "resource_type": "Microsoft.Compute/virtualMachines",
+                "region": "brazilsouth",
+                "monthly_cost": 680.00,
+                "suggested_region": "eastus",
+            },
+        ],
+        "old_resources": [
+            {
+                "name": "vm-batch-worker-01",
+                "resource_group": "rg-production-batch",
+                "resource_type": "Microsoft.Compute/virtualMachines",
+                "region": "eastus",
+                "monthly_cost": 490.00,
+                "age_days": 548,
+            },
+        ],
+    }

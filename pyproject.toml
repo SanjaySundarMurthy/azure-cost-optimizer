@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "azure-cost-optimizer"
+version = "1.0.0"
+description = "Analyze Azure resource costs and get actionable optimization recommendations with projected savings."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    { name = "Sanjay S", email = "sanjaysundarmurthy@gmail.com" },
+]
+keywords = [
+    "azure", "cost", "optimization", "finops", "cloud",
+    "devops", "savings", "rightsizing", "cli",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Systems Administration",
+]
+dependencies = [
+    "click>=8.0",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+azure = [
+    "azure-identity>=1.15",
+    "azure-mgmt-costmanagement>=4.0",
+    "azure-mgmt-compute>=30.0",
+    "azure-mgmt-storage>=21.0",
+    "azure-mgmt-network>=25.0",
+    "azure-mgmt-resource>=23.0",
+    "azure-mgmt-sql>=4.0",
+    "azure-mgmt-monitor>=6.0",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+azure-cost = "azure_cost_optimizer.cli:cli"
+
+[project.urls]
+Homepage = "https://github.com/SanjaySundarMurthy/azure-cost-optimizer"
+Repository = "https://github.com/SanjaySundarMurthy/azure-cost-optimizer"
+Issues = "https://github.com/SanjaySundarMurthy/azure-cost-optimizer/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
