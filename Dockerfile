@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir build && python -m build
 FROM python:3.12-slim
 
 LABEL maintainer="ssan" \
-      org.opencontainers.image.source="https://github.com/ssan/azure-cost-optimizer" \
+      org.opencontainers.image.source="https://github.com/SanjaySundarMurthy/azure-cost-optimizer" \
       org.opencontainers.image.description="azure-cost-optimizer - DevOps CLI Tool"
 
 RUN groupadd -r appuser && useradd -r -g appuser appuser
